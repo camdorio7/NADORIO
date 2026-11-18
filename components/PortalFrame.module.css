@@ -977,3 +977,134 @@
   border-color: color-mix(in srgb, var(--club-primary, #073e2c) 45%, white);
   box-shadow: 0 16px 34px color-mix(in srgb, var(--club-primary, #073e2c) 12%, transparent);
 }
+
+/* Match LINDEX's separate organization masthead and tool navigation. */
+.shell.admin:not(.platform) .sidebar,
+.shell.staff:not(.platform) .sidebar {
+  display: block;
+  padding: 13px clamp(18px, 3vw, 42px);
+  background: var(--club-surface, #fffdf8);
+  border: 0;
+  border-bottom: 1px solid var(--club-border, #dce4dc);
+  box-shadow: none;
+}
+.shell.admin:not(.platform) .brand,
+.shell.staff:not(.platform) .brand,
+.shell.admin:not(.platform) .footer,
+.shell.staff:not(.platform) .footer { display: none; }
+.shell.admin:not(.platform) .nav,
+.shell.staff:not(.platform) .nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+.shell.admin:not(.platform) .navGroup,
+.shell.staff:not(.platform) .navGroup { display: contents; }
+.shell.admin:not(.platform) .groupLabel,
+.shell.staff:not(.platform) .groupLabel { display: none; }
+.shell.admin:not(.platform) .nav a,
+.shell.staff:not(.platform) .nav a {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--club-primary, #073e2c) 12%, transparent);
+  border-radius: 12px;
+  background: var(--club-bg, #f4f1e8);
+  color: var(--club-text, #102c23);
+}
+.shell.admin:not(.platform) .nav a[aria-current="page"],
+.shell.staff:not(.platform) .nav a[aria-current="page"] {
+  border-color: var(--club-primary, #073e2c);
+  background: var(--club-primary, #073e2c);
+  color: var(--club-on-primary, #fff);
+}
+.shell.admin:not(.platform) :global(.n9WorkspaceTopbar),
+.shell.staff:not(.platform) :global(.n9WorkspaceTopbar) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 18px clamp(18px, 3vw, 42px);
+  background: var(--club-surface, #fffdf8);
+  border-bottom: 1px solid var(--club-border, #dce4dc);
+}
+.shell.admin:not(.platform) :global(.n9TopBrand),
+.shell.staff:not(.platform) :global(.n9TopBrand) { min-width: 0; }
+.shell.admin:not(.platform) :global(.n9TopBrand) img,
+.shell.staff:not(.platform) :global(.n9TopBrand) img,
+.shell.admin:not(.platform) :global(.n9TopMonogram),
+.shell.staff:not(.platform) :global(.n9TopMonogram) {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 12px;
+}
+.shell.admin:not(.platform) :global(.n9TopBrand) strong,
+.shell.staff:not(.platform) :global(.n9TopBrand) strong {
+  color: var(--club-text, #102c23);
+  font-size: clamp(18px, 2vw, 26px);
+}
+.shell.admin:not(.platform) :global(.n9TopBrand) span,
+.shell.staff:not(.platform) :global(.n9TopBrand) span {
+  color: var(--club-primary, #073e2c);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.shell.admin:not(.platform) :global(.n9TopBrand) small,
+.shell.staff:not(.platform) :global(.n9TopBrand) small { color: var(--club-muted, #66736d); }
+.shell.admin:not(.platform) :global(.n9TopActions) button,
+.shell.staff:not(.platform) :global(.n9TopActions) button {
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--club-primary, #073e2c);
+  color: var(--club-on-primary, #fff);
+  font-weight: 750;
+}
+@media (max-width: 900px) {
+  .shell.admin:not(.platform) .mobile,
+  .shell.staff:not(.platform) .mobile { display: flex; }
+  .shell.admin:not(.platform) .sidebar,
+  .shell.staff:not(.platform) .sidebar {
+    display: none;
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 40;
+    width: min(88vw, 340px);
+    height: 100dvh;
+    overflow-y: auto;
+    padding: 78px 16px 24px;
+    background: linear-gradient(180deg, var(--club-primary-dark, #052e21), var(--club-primary, #073e2c));
+  }
+  .shell.admin:not(.platform) .sidebar.mobileOpen,
+  .shell.staff:not(.platform) .sidebar.mobileOpen { display: flex; flex-direction: column; }
+  .shell.admin:not(.platform) .sidebar.mobileOpen .brand,
+  .shell.staff:not(.platform) .sidebar.mobileOpen .brand { display: flex; }
+  .shell.admin:not(.platform) .sidebar.mobileOpen .footer,
+  .shell.staff:not(.platform) .sidebar.mobileOpen .footer { display: block; margin-top: auto; }
+  .shell.admin:not(.platform) .sidebar.mobileOpen .brand b,
+  .shell.staff:not(.platform) .sidebar.mobileOpen .brand b,
+  .shell.admin:not(.platform) .sidebar.mobileOpen .nav a,
+  .shell.staff:not(.platform) .sidebar.mobileOpen .nav a { color: #fff; }
+  .shell.admin:not(.platform) .sidebar.mobileOpen .nav,
+  .shell.staff:not(.platform) .sidebar.mobileOpen .nav { flex-direction: column; align-items: stretch; }
+  .shell.admin:not(.platform) .sidebar.mobileOpen .navGroup,
+  .shell.staff:not(.platform) .sidebar.mobileOpen .navGroup { display: block; }
+  .shell.admin:not(.platform) .sidebar.mobileOpen .groupLabel,
+  .shell.staff:not(.platform) .sidebar.mobileOpen .groupLabel { display: block; color: var(--club-secondary, #c9a64b); }
+  .shell.admin:not(.platform) .sidebar.mobileOpen .nav a,
+  .shell.staff:not(.platform) .sidebar.mobileOpen .nav a { background: transparent; border-color: transparent; }
+  .shell.admin:not(.platform) .sidebar.mobileOpen .nav a[aria-current="page"],
+  .shell.staff:not(.platform) .sidebar.mobileOpen .nav a[aria-current="page"] { background: #ffffff24; }
+  .shell.admin:not(.platform) :global(.n9WorkspaceTopbar),
+  .shell.staff:not(.platform) :global(.n9WorkspaceTopbar) { padding: 14px 16px; }
+  .shell.admin:not(.platform) :global(.n9TopActions),
+  .shell.staff:not(.platform) :global(.n9TopActions) { display: none; }
+}

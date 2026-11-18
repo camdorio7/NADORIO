@@ -1,14 +1,11 @@
-# NADORIO LINDEX-style white-label update
+# NADORIO LINDEX portal parity update
 
-Copy the folders in this archive into the root of the NADORIO repository and allow the files to overwrite their existing versions. The update does not change the database schema or remove organization data.
+Copy the folders in this archive into the root of the NADORIO repository and allow the files to overwrite their existing versions. This includes the preceding white-label and public website work plus the portal structure correction. No database migration is included.
 
-This update provides:
-
-- One tenant-branded portal system for member, staff, and administrator workspaces, with member navigation and compact staff/admin navigation.
-- A forest-green and gold default palette, with each organization’s saved colors and logo applied to its workspace and entry pages.
-- Organization-aware sign-in and membership application links, including organization preselection and access checks.
-- A shared public organization website homepage used by both the live site and website-builder preview, with organization-specific content, branding, membership links, contact details, and published pages.
-
-The public site builder already stores drafts and published content per organization. The shared template uses that existing organization-specific data so each club can create its own public site.
+The update:
+- Applies the LINDEX member sidebar and the separate staff/admin masthead with horizontal workspace navigation.
+- Uses tenant-saved colors throughout the portal rather than fixed legacy colors.
+- Keeps member, staff, and administrator access rules and organization-specific navigation labels.
+- Includes the shared public site template, organization-aware sign-in and membership application pages, and matching website-builder preview.
 
 No build or automated test was run for this package.

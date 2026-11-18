@@ -113,6 +113,7 @@ function NavigationLink({ item, active }: { item: NavItem; active: boolean }) {
       onMouseEnter={() => setIntent(true)}
       onFocus={() => setIntent(true)}
       aria-current={active ? "page" : undefined}
+      className={active ? "active" : undefined}
     >
       <NavigationLabel label={item.label} Icon={Icon} />
     </Link>
@@ -183,15 +184,37 @@ export default function PortalFrame({
     items.find((i) => i.href === activeHref)?.label || "Dashboard";
   const layoutClass =
     layout === "admin" ? styles.admin : layout === "staff" ? styles.staff : styles.member;
+  const lindexLayout = `lindex${layout[0].toUpperCase()}${layout.slice(1)}`;
   return (
     <div
-      className={`${styles.shell} ${appearance === "platform" ? styles.platform : ""} ${appearance === "platform" ? "" : layoutClass}`}
+      className={`${styles.shell} ${appearance === "platform" ? styles.platform : "workspace n9Layout " + lindexLayout} ${appearance === "platform" ? "" : layoutClass}`}
       style={theme}
     >
       <a href="#portal-content" className={styles.skipLink}>
         Skip to content
       </a>
-      <header className={styles.mobile}>
+      {(layout === "admin" || layout === "staff") && appearance !== "platform" && (
+        <header className="n9WorkspaceTopbar">
+          <div className="n9TopBrand">
+            {logo ? (
+              <img src={logo} alt="" />
+            ) : (
+              <span className="n9TopMonogram" aria-hidden="true">
+                {name.slice(0, 2).toUpperCase()}
+              </span>
+            )}
+            <div>
+              <strong>{name}</strong>
+              <span>{subtitle}</span>
+              <small>Organization workspace</small>
+            </div>
+          </div>
+          <div className="n9TopActions">
+            <button onClick={onSignOut}>Sign out</button>
+          </div>
+        </header>
+      )}
+      <header className={`${styles.mobile} v3MobileHeader`}>
         <div>
           <b>{name}</b>
           <small>{currentLabel}</small>
@@ -218,9 +241,9 @@ export default function PortalFrame({
       )}
       <aside
         id="portal-navigation"
-        className={`${styles.sidebar} ${open ? styles.open : ""}`}
+        className={`${styles.sidebar} v3Sidebar ${open ? `${styles.open} mobileOpen` : ""}`}
       >
-        <div className={styles.brand}>
+        <div className={`${styles.brand} clubBrand`}>
           {logo ? (
             <img src={logo} alt="" />
           ) : (
@@ -233,10 +256,10 @@ export default function PortalFrame({
             <small>{subtitle}</small>
           </div>
         </div>
-        <nav ref={navigation} className={styles.nav} aria-label={subtitle}>
+        <nav ref={navigation} className={`${styles.nav} v3Nav`} aria-label={subtitle}>
           {groups.map((group) => (
-            <div className={styles.navGroup} key={group || "home"}>
-              {group && <p className={styles.groupLabel}>{group}</p>}
+            <div className={`${styles.navGroup} v3NavGroup`} key={group || "home"}>
+              {group && <span className={styles.groupLabel}>{group}</span>}
               {items
                 .filter((i) => (i.group || "") === group)
                 .map((item) => (
@@ -249,7 +272,7 @@ export default function PortalFrame({
             </div>
           ))}
         </nav>
-        <div className={styles.footer}>
+        <div className={`${styles.footer} sidefoot`}>
           {footer}
           <button onClick={onSignOut}>
             <LogOut size={17} aria-hidden="true" />
@@ -262,7 +285,7 @@ export default function PortalFrame({
         id="portal-content"
         tabIndex={-1}
         ref={main}
-        className={styles.main}
+        className={`${styles.main} v3Main`}
       >
         {children}
       </main>

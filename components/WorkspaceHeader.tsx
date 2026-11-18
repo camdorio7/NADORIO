@@ -11,7 +11,7 @@ export default function WorkspaceHeader({
   return (
     <div className="top">
       <div>
-        <div className="eyebrow cyan">
+        <div className="eyebrow">
           {club.portal_title?.trim() || "CLUB WORKSPACE"}
         </div>
         <h1>{title}</h1>
