@@ -71,6 +71,10 @@ export default function OrganizationSettings() {
         contact_email: club.contact_email,
         website_url: club.website_url,
         primary_color: club.primary_color,
+        secondary_color: club.secondary_color,
+        background_color: club.background_color,
+        surface_color: club.surface_color,
+        text_color: club.text_color,
         portal_title: club.portal_title,
         welcome_message: club.welcome_message,
         organization_type: club.organization_type,
@@ -139,7 +143,7 @@ export default function OrganizationSettings() {
     <>
       <WorkspaceHeader
         title="Organization Settings"
-        subtitle="One brand color, automatic portal styling, and licensed features"
+        subtitle="Customize your organization identity, portal colors, and licensed features"
       />
       <div className="settingsGrid">
         <section className="panel nomargin">
@@ -215,22 +219,31 @@ export default function OrganizationSettings() {
                 }
               />
             </div>
-            <div className="field">
-              <label>Primary brand color</label>
-              <input
-                aria-label="Primary brand color"
-                type="color"
-                value={
-                  /^#[0-9a-fA-F]{6}$/.test(club.primary_color || "")
-                    ? club.primary_color
-                    : "#275e72"
-                }
-                onChange={(e) =>
-                  setClub({ ...club, primary_color: e.target.value })
-                }
-              />
-              <small>All supporting colors are generated automatically.</small>
+            <div className="colorGrid">
+              {([
+                ["primary_color", "Primary color", "#275e72"],
+                ["secondary_color", "Secondary / accent", "#13d9e8"],
+                ["background_color", "Portal background", "#07111f"],
+                ["surface_color", "Panels and cards", "#0d1b2a"],
+                ["text_color", "Text color", "#f4f8ff"],
+              ] as const).map(([key, label, fallback]) => (
+                <label className="field" key={key}>
+                  <span>{label}</span>
+                  <input
+                    aria-label={label}
+                    type="color"
+                    value={
+                      /^#[0-9a-fA-F]{6}$/.test(club[key] || "")
+                        ? club[key]
+                        : fallback
+                    }
+                    onChange={(e) => setClub({ ...club, [key]: e.target.value })}
+                  />
+                  <small>{club[key] || fallback}</small>
+                </label>
+              ))}
             </div>
+            <small>These colors apply throughout the organization portal and its public-facing site.</small>
             <div
               style={{
                 padding: 16,
