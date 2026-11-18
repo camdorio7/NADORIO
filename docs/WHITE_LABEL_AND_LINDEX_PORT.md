@@ -55,3 +55,7 @@ NADORIO remains the multi-organization application and system of record. LINDEX 
 ## Deployment note
 
 Apply `supabase/migrations/021_nadorio_white_label_branding.sql` through the normal migration process before expecting public websites to receive the expanded branding fields. Back up the database and test the migration in staging first.
+
+## 12.2 staff time-management port
+
+The first LINDEX workflow port is implemented in `supabase/migrations/022_nadorio_staff_time_management.sql` and `app/workspace/[id]/staff/page.tsx`. It adds organization-timezone timesheets, optional shift tips, permission-checked manager corrections with audit history, and CSV export while retaining NADORIO's existing `club_id` / `user_id` schema. See `docs/NADORIO-12.2-STAFF-TIME-MANAGEMENT.md` for migration and staging checks.
