@@ -188,7 +188,7 @@ export default function WorkspaceShell({
         }
         logo={club.logo_url}
         items={items}
-        theme={organizationTheme(club.primary_color) as CSSProperties}
+        theme={organizationTheme(club) as CSSProperties}
         onSignOut={out}
         footer={
           <>

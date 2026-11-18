@@ -19,6 +19,10 @@ export type PublicClubData = {
   name?: string | null;
   logo_url?: string | null;
   primary_color?: string | null;
+  secondary_color?: string | null;
+  background_color?: string | null;
+  surface_color?: string | null;
+  text_color?: string | null;
 };
 export function PublicOrganizationSite({
   id,
@@ -51,7 +55,7 @@ export function PublicOrganizationSite({
       className={styles.shell}
       style={
         {
-          ...organizationTheme(club?.primary_color),
+          ...organizationTheme(club),
           "--site-hero-image": hero
             ? `url("${hero.replace(/["\\]/g, "")}")`
             : "none",

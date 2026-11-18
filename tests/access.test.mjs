@@ -159,3 +159,22 @@ test("brand text remains readable on light surfaces", () => {
     assert.ok(1.05 / (luminance + 0.05) >= 4.5);
   }
 });
+
+test("organization themes support complete white-label color settings", () => {
+  const theme = organizationTheme({
+    primary_color: "#123456",
+    secondary_color: "#abcdef",
+    background_color: "#101010",
+    surface_color: "#202020",
+    text_color: "#fefefe",
+  });
+  assert.equal(theme["--club-primary"], "#123456");
+  assert.equal(theme["--club-secondary"], "#abcdef");
+  assert.equal(theme["--club-bg"], "#101010");
+  assert.equal(theme["--club-surface"], "#202020");
+  assert.equal(theme["--club-text"], "#fefefe");
+});
+
+test("legacy primary-color theme calls remain supported", () => {
+  assert.equal(organizationTheme("#123456")["--club-primary"], "#123456");
+});
