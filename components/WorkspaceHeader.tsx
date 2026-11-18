@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useWorkspace } from "./WorkspaceShell";
 export default function WorkspaceHeader({
   title,
   subtitle,
@@ -7,11 +7,13 @@ export default function WorkspaceHeader({
   title: string;
   subtitle?: string;
 }) {
-  useParams();
+  const { club } = useWorkspace();
   return (
     <div className="top">
       <div>
-        <div className="eyebrow cyan">ORGANIZATION WORKSPACE</div>
+        <div className="eyebrow cyan">
+          {club.portal_title?.trim() || "CLUB WORKSPACE"}
+        </div>
         <h1>{title}</h1>
         {subtitle && <div className="muted">{subtitle}</div>}
       </div>

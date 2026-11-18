@@ -490,6 +490,283 @@
   }
 }
 
+/* A single tenant design system covers the member, staff, and admin portals. */
+.shell:not(.platform) .main :global(.top) {
+  margin-bottom: 28px;
+}
+.shell:not(.platform) .main :global(.top h1),
+.shell:not(.platform) .main :global(.v6PageHead h1),
+.shell:not(.platform) .main :global(.v11PageHead h1),
+.shell:not(.platform) .main :global(.v7OwnerHead h1) {
+  color: var(--club-primary, #073e2c);
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: -0.035em;
+}
+.shell:not(.platform) .main :global(.eyebrow),
+.shell:not(.platform) .main :global(.cyan) {
+  color: var(--club-primary, #073e2c);
+}
+.shell:not(.platform) .main :global(.toolbar),
+.shell:not(.platform) .main :global(.clubnav),
+.shell:not(.platform) .main :global(.moduleList),
+.shell:not(.platform) .main :global(.v12Actions),
+.shell:not(.platform) .main :global(.v11Notice) {
+  background: var(--club-surface, #fffdf8);
+  color: var(--club-text, #102c23);
+  border-color: var(--club-border, #dce4dc);
+  border-radius: 15px;
+}
+.shell:not(.platform) .main :global(.toolbar) {
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--club-primary, #073e2c) 6%, transparent);
+}
+.shell:not(.platform) .main :global(.toolbar input) {
+  background: transparent;
+  color: var(--club-text, #102c23);
+  border: 0;
+  box-shadow: none;
+}
+.shell:not(.platform) .main :global(.v11Form),
+.shell:not(.platform) .main :global(.memberPanel),
+.shell:not(.platform) .main :global(.memberListItem),
+.shell:not(.platform) .main :global(.v3Empty),
+.shell:not(.platform) .main :global(.v6WorkspacePage > section),
+.shell:not(.platform) .main :global(.settingsBody) {
+  color: var(--club-text, #102c23);
+}
+.shell:not(.platform) .main :global(.memberPanel),
+.shell:not(.platform) .main :global(.memberListItem) {
+  background: var(--club-surface, #fffdf8);
+  border-color: var(--club-border, #dce4dc);
+  border-radius: 16px;
+}
+.shell:not(.platform) .main :global(.button.gradient),
+.shell:not(.platform) .main :global(.button.primary),
+.shell:not(.platform) .main :global(.authPrimary) {
+  background: var(--club-primary, #073e2c);
+  color: var(--club-on-primary, #fff);
+  border: 1px solid var(--club-primary, #073e2c);
+  border-radius: 12px;
+  box-shadow: 0 9px 22px color-mix(in srgb, var(--club-primary, #073e2c) 18%, transparent);
+}
+.shell:not(.platform) .main :global(.button.secondary) {
+  background: var(--club-surface, #fffdf8);
+  color: var(--club-primary, #073e2c);
+  border: 1px solid color-mix(in srgb, var(--club-primary, #073e2c) 24%, white);
+  border-radius: 12px;
+}
+.shell:not(.platform) .main :global(.button.gradient):hover,
+.shell:not(.platform) .main :global(.button.primary):hover,
+.shell:not(.platform) .main :global(.button.secondary):hover {
+  filter: brightness(1.04);
+  transform: translateY(-1px);
+}
+.shell:not(.platform) .main :global(.status),
+.shell:not(.platform) .main :global(.chip.good) {
+  background: color-mix(in srgb, var(--club-primary, #073e2c) 11%, white);
+  color: var(--club-primary, #073e2c);
+  border: 1px solid color-mix(in srgb, var(--club-primary, #073e2c) 20%, white);
+}
+.shell:not(.platform) .main :global(table) {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-color: var(--club-border, #dce4dc);
+}
+.shell:not(.platform) .main :global(th) {
+  background: color-mix(in srgb, var(--club-primary, #073e2c) 7%, white);
+  color: var(--club-primary, #073e2c);
+}
+.shell:not(.platform) .main :global(th),
+.shell:not(.platform) .main :global(td) {
+  border-color: var(--club-border, #dce4dc);
+}
+.shell:not(.platform) .main :global(.successMsg),
+.shell:not(.platform) .main :global(.v11Notice) {
+  background: color-mix(in srgb, var(--club-primary, #073e2c) 7%, white);
+  color: var(--club-primary, #073e2c);
+}
+.shell:not(.platform) :is(a, button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--club-secondary, #c9a64b);
+  outline-offset: 3px;
+}
+
+/* LINDEX keeps a compact horizontal workspace bar for staff and managers. */
+.shell.admin:not(.platform),
+.shell.staff:not(.platform) {
+  display: block;
+  min-height: 100dvh;
+}
+.shell.admin:not(.platform) .mobile,
+.shell.staff:not(.platform) .mobile,
+.shell.admin:not(.platform) .backdrop,
+.shell.staff:not(.platform) .backdrop {
+  display: none;
+}
+.shell.admin:not(.platform) .sidebar,
+.shell.staff:not(.platform) .sidebar {
+  position: relative;
+  inset: auto;
+  transform: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  padding: 17px clamp(18px, 3vw, 42px) 12px;
+  background: var(--club-surface, #fffdf8);
+  border: 0;
+  border-bottom: 1px solid var(--club-border, #dce4dc);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--club-primary, #073e2c) 7%, transparent);
+}
+.shell.admin:not(.platform) .brand,
+.shell.staff:not(.platform) .brand {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+.shell.admin:not(.platform) .brand b,
+.shell.staff:not(.platform) .brand b {
+  color: var(--club-text, #102c23);
+  font-size: 21px;
+}
+.shell.admin:not(.platform) .brand small,
+.shell.staff:not(.platform) .brand small {
+  color: var(--club-primary, #073e2c);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.shell.admin:not(.platform) .nav,
+.shell.staff:not(.platform) .nav {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 2px 0 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--club-border, #dce4dc) transparent;
+}
+.shell.admin:not(.platform) .navGroup,
+.shell.staff:not(.platform) .navGroup {
+  display: contents;
+}
+.shell.admin:not(.platform) .groupLabel,
+.shell.staff:not(.platform) .groupLabel {
+  display: none;
+}
+.shell.admin:not(.platform) .nav a,
+.shell.staff:not(.platform) .nav a {
+  flex: 0 0 auto;
+  min-height: 42px;
+  padding: 9px 13px;
+  color: var(--club-text, #102c23);
+  background: color-mix(in srgb, var(--club-bg, #f4f1e8) 72%, white);
+  border: 1px solid var(--club-border, #dce4dc);
+  border-radius: 12px;
+  font-weight: 700;
+}
+.shell.admin:not(.platform) .nav a:hover,
+.shell.staff:not(.platform) .nav a:hover {
+  background: var(--club-primary-soft, #eaf1e9);
+  color: var(--club-primary, #073e2c);
+}
+.shell.admin:not(.platform) .nav a[aria-current="page"],
+.shell.staff:not(.platform) .nav a[aria-current="page"] {
+  background: var(--club-primary, #073e2c);
+  color: var(--club-on-primary, #fff);
+  border-color: var(--club-primary, #073e2c);
+  box-shadow: none;
+}
+.shell.admin:not(.platform) .footer,
+.shell.staff:not(.platform) .footer {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+.shell.admin:not(.platform) .footer a,
+.shell.staff:not(.platform) .footer a,
+.shell.admin:not(.platform) .footer button,
+.shell.staff:not(.platform) .footer button {
+  min-height: 40px;
+  width: auto;
+  padding: 9px 12px;
+  color: var(--club-primary, #073e2c);
+  background: var(--club-surface, #fffdf8);
+  border: 1px solid var(--club-border, #dce4dc);
+  border-radius: 11px;
+  white-space: nowrap;
+}
+.shell.admin:not(.platform) .footer small,
+.shell.staff:not(.platform) .footer small {
+  display: none;
+}
+.shell.admin:not(.platform) .main,
+.shell.staff:not(.platform) .main {
+  max-width: none;
+  padding: 27px clamp(18px, 3vw, 42px) 72px;
+}
+@media (max-width: 900px) {
+  .shell.admin:not(.platform) .sidebar,
+  .shell.staff:not(.platform) .sidebar {
+    position: relative;
+    display: grid;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    transform: none;
+    padding: 14px 16px 10px;
+  }
+  .shell.admin:not(.platform) .nav,
+  .shell.staff:not(.platform) .nav {
+    display: flex;
+    width: 100%;
+  }
+  .shell.admin:not(.platform) .main,
+  .shell.staff:not(.platform) .main {
+    padding: 22px 16px 48px;
+  }
+}
+@media (max-width: 600px) {
+  .shell.admin:not(.platform) .sidebar,
+  .shell.staff:not(.platform) .sidebar {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: 8px;
+  }
+  .shell.admin:not(.platform) .brand,
+  .shell.staff:not(.platform) .brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .shell.admin:not(.platform) .footer,
+  .shell.staff:not(.platform) .footer {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .shell.admin:not(.platform) .nav,
+  .shell.staff:not(.platform) .nav {
+    grid-column: 1;
+    grid-row: 3;
+    margin-top: 2px;
+  }
+}
+
 .secondaryNav {
   display: flex;
   gap: 24px;
@@ -639,4 +916,64 @@
 @media (max-width: 900px) {
   .shell:not(.platform) .sidebar { box-shadow: 18px 0 50px #0003; }
   .shell:not(.platform) .main { padding: 22px 16px 48px; }
+}
+
+.shell:not(.platform) .main { color: var(--club-text, #102c23); }
+.shell:not(.platform) .main h1,
+.shell:not(.platform) .main h2,
+.shell:not(.platform) .main h3,
+.shell:not(.platform) .main h4 { color: var(--club-text, #102c23); }
+.shell:not(.platform) .main a:not(:global(.button)) { color: var(--club-primary, #073e2c); }
+.shell:not(.platform) .main a:not(:global(.button)):hover { color: var(--club-primary-dark, #052e21); }
+.shell:not(.platform) .main :global(.v11TableWrap) {
+  border-color: var(--club-border, #dce4dc);
+  background: var(--club-surface, #fffdf8);
+  border-radius: 15px;
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--club-primary, #073e2c) 6%, transparent);
+}
+.shell:not(.platform) .main :global(.v11Table) { color: var(--club-text, #102c23); }
+.shell:not(.platform) .main :global(.v11Table th) {
+  background: color-mix(in srgb, var(--club-primary, #073e2c) 7%, var(--club-surface, #fffdf8));
+  color: var(--club-primary, #073e2c);
+}
+.shell:not(.platform) .main :global(.v11Table td),
+.shell:not(.platform) .main :global(.v11Table th) { border-bottom-color: var(--club-border, #dce4dc); }
+.shell:not(.platform) .main :global(.v11Notice) {
+  background: var(--club-primary-soft, #eaf1e9);
+  border-color: color-mix(in srgb, var(--club-primary, #073e2c) 22%, white);
+  color: var(--club-text, #102c23);
+}
+.shell:not(.platform) .main :global(.successMsg) {
+  background: color-mix(in srgb, #17834b 9%, white);
+  color: #155b37;
+  border: 1px solid color-mix(in srgb, #17834b 24%, white);
+}
+.shell:not(.platform) .main :global(.memberWelcome),
+.shell:not(.platform) .main :global(.memberIdentity),
+.shell:not(.platform) .main :global(.memberQuick),
+.shell:not(.platform) .main :global(.memberPanel),
+.shell:not(.platform) .main :global(.profileCard),
+.shell:not(.platform) .main :global(.accountFact) {
+  background-color: var(--club-surface, #fffdf8);
+  color: var(--club-text, #102c23);
+  border-color: var(--club-border, #dce4dc);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--club-primary, #073e2c) 7%, transparent);
+}
+.shell:not(.platform) .main :global(.memberWelcome) {
+  background: linear-gradient(120deg, var(--club-primary-soft, #eaf1e9), var(--club-surface, #fffdf8));
+}
+.shell:not(.platform) .main :global(.memberIdentity span),
+.shell:not(.platform) .main :global(.memberQuick span),
+.shell:not(.platform) .main :global(.memberListItem p),
+.shell:not(.platform) .main :global(.accountFact span) { color: var(--club-muted, #66736d); }
+.shell:not(.platform) .main :global(.memberAvatar) {
+  background: var(--club-primary-soft, #eaf1e9);
+  border-color: color-mix(in srgb, var(--club-primary, #073e2c) 30%, white);
+  color: var(--club-primary, #073e2c);
+}
+.shell:not(.platform) .main :global(.memberPanelHead),
+.shell:not(.platform) .main :global(.memberListItem) { border-color: var(--club-border, #dce4dc); }
+.shell:not(.platform) .main :global(.memberQuick:hover) {
+  border-color: color-mix(in srgb, var(--club-primary, #073e2c) 45%, white);
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--club-primary, #073e2c) 12%, transparent);
 }

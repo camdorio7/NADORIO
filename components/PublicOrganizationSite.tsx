@@ -3,7 +3,12 @@ import PublicSiteNavigation from "./PublicSiteNavigation";
 import type { CSSProperties, ReactNode } from "react";
 import { organizationTheme } from "../lib/organization-theme";
 import styles from "./PublicOrganizationSite.module.css";
-export type PublicPage = { slug: string; title: string; body: string };
+export type PublicPage = {
+  slug: string;
+  title: string;
+  body: string;
+  published?: boolean;
+};
 export type PublicSiteData = {
   title: string;
   tagline?: string | null;
@@ -44,7 +49,8 @@ export function PublicOrganizationSite({
       p &&
       typeof p.slug === "string" &&
       /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.slug) &&
-      typeof p.title === "string",
+      typeof p.title === "string" &&
+      (preview || p.published !== false),
   );
   const hero =
     site.hero_image_url && /^https:\/\/[^\s]+$/i.test(site.hero_image_url)
@@ -75,13 +81,22 @@ export function PublicOrganizationSite({
             <span>{club?.name || site.title}</span>
           </Link>
           {preview ? (
-            <nav aria-label="Draft preview navigation">
+            <nav className={styles.nav} aria-label="Draft preview navigation">
+              <a href="#" onClick={(e) => e.preventDefault()}>
+                Home
+              </a>
               {pages.map((p) => (
-                <a key={p.slug} href={`#${p.slug}`} style={{ marginRight: 16 }}>
+                <a key={p.slug} href={`#${p.slug}`}>
                   {p.title}
                 </a>
               ))}
               <a href="#contact">Contact</a>
+              <a className={styles.navAction} href={`/login?organization=${id}`}>
+                Member sign in
+              </a>
+              <a className={styles.navPrimary} href={`/member/join?organization=${id}`}>
+                Apply for membership
+              </a>
             </nav>
           ) : (
             <PublicSiteNavigation id={id} pages={pages} active={active} />
@@ -91,7 +106,7 @@ export function PublicOrganizationSite({
       {children}
       <footer className={styles.footer}>
         <strong>{club?.name || site.title}</strong>
-        <span>Powered by CD7 Technologies · NADORIO</span>
+        <span>Powered by CD7 Technologies</span>
       </footer>
     </div>
   );

@@ -48,6 +48,20 @@ export default function PublicSiteNavigation({
         <Link href={`/site/${id}#contact`} onClick={() => setOpen(false)}>
           Contact
         </Link>
+        <Link
+          className={styles.navAction}
+          href={`/login?organization=${id}`}
+          onClick={() => setOpen(false)}
+        >
+          Member sign in
+        </Link>
+        <Link
+          className={styles.navPrimary}
+          href={`/member/join?organization=${id}`}
+          onClick={() => setOpen(false)}
+        >
+          Apply for membership
+        </Link>
       </nav>
     </>
   );

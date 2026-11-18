@@ -1,9 +1,10 @@
 "use client";
 import { authCallbackUrl } from "../../../lib/auth-navigation";
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import type { CSSProperties } from "react";
 import { Building2, CheckCircle2, Search, ShieldCheck } from "lucide-react";
-import NadorioLogo from "../../../components/NadorioLogo";
 import { createClient } from "../../../lib/supabase/client";
+import { organizationTheme } from "../../../lib/organization-theme";
 
 type Club = {
   id: string;
@@ -45,7 +46,18 @@ export default function Page() {
           "list_public_nadorio_clubs",
         );
         if (error) throw error;
-        if (live) setClubs((data as Club[]) || []);
+        if (live) {
+          const organizations = (data as Club[]) || [];
+          setClubs(organizations);
+          const requestedId = new URLSearchParams(window.location.search).get(
+            "organization",
+          );
+          if (requestedId)
+            setSelected(
+              organizations.find((organization) => organization.id === requestedId) ||
+                null,
+            );
+        }
       } catch {
         if (live)
           setLoadError(
@@ -140,7 +152,7 @@ export default function Page() {
         return;
       }
       setMsg(
-        "Check your email to verify your NADORIO account. After verification, your application will be sent to the club for approval.",
+        "Check your email to verify your account. After verification, your application will be sent to the club for approval.",
       );
       setBusy(false);
     } catch (error) {
@@ -153,18 +165,31 @@ export default function Page() {
       setBusy(false);
     }
   }
+  const theme = organizationTheme(selected?.primary_color || null) as CSSProperties;
   return (
-    <main className="memberJoinPage">
+    <main className="memberJoinPage" style={theme}>
       <section className="memberJoinShell">
         <header className="memberJoinTop">
-          <NadorioLogo />
-          <a href="/login">
+          <div className="memberJoinBrand">
+            {selected?.logo_url ? (
+              <img src={selected.logo_url} alt="" />
+            ) : (
+              <span aria-hidden="true">
+                {(selected?.name || "Club").slice(0, 2).toUpperCase()}
+              </span>
+            )}
+            <div>
+              <small>{selected?.name || "CLUB MEMBERSHIP"}</small>
+              <strong>{selected ? "Membership application" : "Find your club"}</strong>
+            </div>
+          </div>
+          <a href={selected ? `/login?organization=${selected.id}` : "/login"}>
             Already registered? <b>Sign in</b>
           </a>
         </header>
         <div className="memberJoinIntro">
-          <span className="v3pill">MEMBER REGISTRATION</span>
-          <h1>Join your club.</h1>
+          <span className="v3pill">{selected ? "MEMBERSHIP APPLICATION" : "MEMBER REGISTRATION"}</span>
+          <h1>{selected ? `Join ${selected.name}.` : "Join your club."}</h1>
           <p>
             Choose your organization and membership level. Your club reviews
             every application before access is activated.
@@ -384,7 +409,7 @@ export default function Page() {
           </div>
         )}
         <footer className="memberJoinFooter">
-          Secure club access · NADORIO by CD7 Technologies
+          Secure club access · CD7 Technologies
         </footer>
       </section>
     </main>

@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useWorkspace } from "../../../../../components/WorkspaceShell";
 import { createClient } from "../../../../../lib/supabase/client";
+import PublicOrganizationHomepage from "../../../../../components/PublicOrganizationHomepage";
 import {
   PublicOrganizationSite,
-  publicSiteStyles as s,
 } from "../../../../../components/PublicOrganizationSite";
 export default function Preview() {
   const { club } = useWorkspace();
@@ -39,35 +39,12 @@ export default function Preview() {
       {message && <p role="status">{message}</p>}
       {site && (
         <PublicOrganizationSite id={club.id} club={club} site={site} preview>
-          <section className={s.hero}>
-            <div className={s.heroInner}>
-              <div className={s.eyebrow}>{club.name}</div>
-              <h1>{site.title}</h1>
-              <p>{site.tagline}</p>
-            </div>
-          </section>
-          <section className={s.content}>
-            <h2>Welcome</h2>
-            <p style={{ whiteSpace: "pre-wrap" }}>{site.about}</p>
-            {site.services?.map((v: string, i: number) => (
-              <p key={i}>{v}</p>
-            ))}
-          </section>
-          {site.pages?.map((p: any) => (
-            <section className={s.content} id={p.slug} key={p.slug}>
-              <h2>
-                {p.title} {p.published === false ? "(Draft page)" : ""}
-              </h2>
-              <p style={{ whiteSpace: "pre-wrap" }}>{p.body}</p>
-            </section>
-          ))}
-          <section className={s.content} id="contact">
-            <h2>Contact</h2>
-            <p>
-              {site.contact_email} · {site.phone}
-            </p>
-            <p>{site.address}</p>
-          </section>
+          <PublicOrganizationHomepage
+            id={club.id}
+            club={club}
+            site={site}
+            preview
+          />
         </PublicOrganizationSite>
       )}
     </>

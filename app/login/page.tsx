@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, Suspense, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState, type CSSProperties } from "react";
 import {
   Eye,
   EyeOff,
@@ -11,12 +11,19 @@ import {
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { safeNextPath } from "../../lib/auth-navigation";
-import NadorioLogo from "../../components/NadorioLogo";
 import { createClient } from "../../lib/supabase/client";
+import { organizationTheme, type OrganizationBrand } from "../../lib/organization-theme";
+
+type PublicOrganizationBrand = OrganizationBrand & {
+  name?: string | null;
+  logo_url?: string | null;
+};
 
 function LoginContent() {
   const router = useRouter();
   const params = useSearchParams();
+  const organizationId = params.get("organization") || "";
+  const [organization, setOrganization] = useState<PublicOrganizationBrand | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -28,9 +35,24 @@ function LoginContent() {
       setMsg(
         params.get("error") === "auth_link_expired"
           ? "This sign-in link has expired or could not be verified. Request a new link, or sign in with your password."
-          : "This account is not authorized for that area of NADORIO.",
+          : "This account is not authorized for that area of the organization portal.",
       );
   }, [params]);
+
+  useEffect(() => {
+    let live = true;
+    setOrganization(null);
+    if (!/^[0-9a-f-]{36}$/i.test(organizationId)) return;
+    createClient()
+      .rpc("v11_public_branding", { target_club: organizationId })
+      .maybeSingle()
+      .then(({ data }) => {
+        if (live) setOrganization((data as PublicOrganizationBrand | null) || null);
+      });
+    return () => {
+      live = false;
+    };
+  }, [organizationId]);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -71,17 +93,19 @@ function LoginContent() {
           "Signed in, but your organization access could not be loaded. Please retry.",
         );
       if (isSuper === true || profile?.platform_role === "super_admin") {
-        router.replace("/dashboard");
+        router.replace(organizationId ? `/workspace/${organizationId}` : "/dashboard");
         router.refresh();
         return;
       }
 
-      const { data: memberships, error: membershipError } = await sb
+      let membershipsQuery = sb
         .from("club_users")
         .select("club_id, role")
         .eq("user_id", data.user.id)
-        .eq("active", true)
-        .limit(2);
+        .eq("active", true);
+      if (organizationId)
+        membershipsQuery = membershipsQuery.eq("club_id", organizationId);
+      const { data: memberships, error: membershipError } = await membershipsQuery.limit(2);
       if (membershipError)
         throw new Error("Unable to load your organizations. Please retry.");
       if (!memberships?.length) {
@@ -93,7 +117,9 @@ function LoginContent() {
             "Unable to check your membership application. Please retry.",
           );
         const pending = (requests || []).find(
-          (r: any) => r.status === "pending",
+          (r: any) =>
+            r.status === "pending" &&
+            (!organizationId || r.club_id === organizationId),
         );
         if (pending) {
           router.replace("/member/pending");
@@ -101,15 +127,19 @@ function LoginContent() {
           return;
         }
         setMsg(
-          "No active club access was found. If you are joining a club, submit a membership application below.",
+          organizationId
+            ? `This account does not have active access to ${organization?.name || "this organization"}. Apply for membership or ask a club administrator for an invitation.`
+            : "No active club access was found. If you are joining a club, submit a membership application below.",
         );
         setBusy(false);
         return;
       }
       router.replace(
-        memberships.length > 1
-          ? "/organizations"
-          : "/workspace/" + memberships[0].club_id,
+        organizationId
+          ? "/workspace/" + organizationId
+          : memberships.length > 1
+            ? "/organizations"
+            : "/workspace/" + memberships[0].club_id,
       );
       router.refresh();
     } catch (error) {
@@ -123,22 +153,34 @@ function LoginContent() {
     }
   }
 
+  const theme = organizationTheme(organization) as CSSProperties;
+  const organizationName = organization?.name || "your club";
   return (
-    <main className="authPage">
+    <main className="authPage lindexAuthPage" style={theme}>
       <div className="authGlow authGlowOne" />
       <div className="authGlow authGlowTwo" />
       <section className="authShell">
         <header className="authBrand">
-          <NadorioLogo />
+          {organization?.logo_url ? (
+            <img src={organization.logo_url} alt={`${organizationName} logo`} />
+          ) : (
+            <span className="authBrandMark" aria-hidden="true">
+              {organization?.name?.slice(0, 2).toUpperCase() || "C"}
+            </span>
+          )}
+          <div>
+            <small>{organization ? "SECURE CLUB ACCESS" : "MEMBER & STAFF PORTAL"}</small>
+            <strong>{organization?.name || "Club Portal"}</strong>
+          </div>
         </header>
         <div className="authCard">
           <div className="authIntro">
-            <span className="authEyebrow">SECURE CLUB ACCESS</span>
+            <span className="authEyebrow">{organization ? "SECURE CLUB ACCESS" : "WELCOME TO YOUR CLUB"}</span>
             <h1>Welcome back</h1>
-            <p>Sign in to access your club.</p>
+            <p>Sign in to access {organizationName}.</p>
           </div>
 
-          <div className="authAudience" aria-label="NADORIO account types">
+          <div className="authAudience" aria-label="Club account types">
             <span>
               <UserRound size={15} /> Members
             </span>
@@ -201,15 +243,15 @@ function LoginContent() {
           <div className="authJoin">
             <div>
               <strong>Joining a club?</strong>
-              <span>Create your NADORIO account and request membership.</span>
+              <span>Create your account and request membership.</span>
             </div>
-            <a href="/member/join">
+            <a href={organizationId ? `/member/join?organization=${organizationId}` : "/member/join"}>
               Create an account <span>→</span>
             </a>
           </div>
         </div>
         <footer className="authFooter">
-          <span>Secure access powered by NADORIO</span>
+          <span>Secure access for your organization</span>
           <span>CD7 Technologies</span>
         </footer>
       </section>
@@ -223,9 +265,7 @@ export default function LoginPage() {
       fallback={
         <main className="authPage">
           <section className="authShell">
-            <header className="authBrand">
-              <NadorioLogo />
-            </header>
+            <header className="authBrand"><span className="authBrandMark">C</span><strong>Club Portal</strong></header>
           </section>
         </main>
       }

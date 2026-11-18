@@ -89,6 +89,10 @@ export default function WorkspaceShell({
   const member = access.role === "member";
   const admin = isAdmin(access.role);
   const type = getOrganizationType(club.organization_type);
+  const customNavigationLabel = (key: string, fallback: string) =>
+    access.modules
+      .find((module) => module.module_key === key)
+      ?.nav_label?.trim() || fallback;
   const items: NavItem[] = [{ href: base, label: "Dashboard" }];
   if (member)
     items.push({
@@ -100,14 +104,17 @@ export default function WorkspaceShell({
     if (member && m.key === "members") {
       items.push({
         href: base + "/directory",
-        label: "Directory",
+        label: customNavigationLabel("members", "Directory"),
         group: "Organization services",
       });
       continue;
     }
     items.push({
       href: base + "/" + m.path,
-      label: m.key === "members" ? type.memberLabel : m.name,
+      label: customNavigationLabel(
+        m.key,
+        m.key === "members" ? type.memberLabel : m.name,
+      ),
       group: member ? type.serviceLabel : m.group,
     });
   }
@@ -188,6 +195,7 @@ export default function WorkspaceShell({
         }
         logo={club.logo_url}
         items={items}
+        layout={member ? "member" : admin ? "admin" : "staff"}
         theme={organizationTheme(club) as CSSProperties}
         onSignOut={out}
         footer={

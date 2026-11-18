@@ -46,6 +46,7 @@ import {
 } from "lucide-react";
 import styles from "./PortalFrame.module.css";
 export type NavItem = { href: string; label: string; group?: string };
+export type PortalLayout = "member" | "staff" | "admin";
 const icons: Record<string, LucideIcon> = {
   dashboard: LayoutDashboard,
   clubs: Building2,
@@ -127,6 +128,7 @@ export default function PortalFrame({
   theme,
   footer,
   appearance = "organization",
+  layout = "member",
 }: {
   name: string;
   subtitle: string;
@@ -137,6 +139,7 @@ export default function PortalFrame({
   theme?: CSSProperties;
   footer?: ReactNode;
   appearance?: "organization" | "platform";
+  layout?: PortalLayout;
 }) {
   const path = usePathname();
   const [open, setOpen] = useState(false);
@@ -178,9 +181,11 @@ export default function PortalFrame({
   }, [activeHref]);
   const currentLabel =
     items.find((i) => i.href === activeHref)?.label || "Dashboard";
+  const layoutClass =
+    layout === "admin" ? styles.admin : layout === "staff" ? styles.staff : styles.member;
   return (
     <div
-      className={`${styles.shell} ${appearance === "platform" ? styles.platform : ""}`}
+      className={`${styles.shell} ${appearance === "platform" ? styles.platform : ""} ${appearance === "platform" ? "" : layoutClass}`}
       style={theme}
     >
       <a href="#portal-content" className={styles.skipLink}>
@@ -250,7 +255,7 @@ export default function PortalFrame({
             <LogOut size={17} aria-hidden="true" />
             Sign out
           </button>
-          <small>NADORIO · CD7 Technologies</small>
+          {appearance === "platform" && <small>NADORIO · CD7 Technologies</small>}
         </div>
       </aside>
       <main
