@@ -126,7 +126,7 @@ test("foreground contrast meets WCAG AA for organization primary colors", () => 
     "#ffffff",
     "#808080",
     "#ff0000",
-    "#275e72",
+    "#073e2c",
     "#00ff00",
     "#0000ff",
     "#a08060",
@@ -144,7 +144,7 @@ test("foreground contrast meets WCAG AA for organization primary colors", () => 
 test("invalid brand values fall back safely", () =>
   assert.equal(
     organizationTheme("url(javascript:bad)")["--club-primary"],
-    "#275e72",
+    "#073e2c",
   ));
 
 test("brand text remains readable on light surfaces", () => {

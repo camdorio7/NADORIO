@@ -14,6 +14,7 @@ type Module = {
   club_enabled: boolean;
   member_visible?: boolean;
   sort_order?: number;
+  nav_label?: string | null;
   module_catalog?: { name: string; description: string } | null;
 };
 export default function OrganizationSettings() {
@@ -110,6 +111,19 @@ export default function OrganizationSettings() {
     setBusy(false);
     await load();
   }
+  async function saveNavLabel(m: Module) {
+    const label = (m.nav_label || "").trim();
+    setBusy(true);
+    const { error } = await createClient()
+      .from("club_modules")
+      .update({ nav_label: label || null })
+      .eq("club_id", id)
+      .eq("module_key", m.module_key)
+      .eq("licensed", true);
+    setBusy(false);
+    setMsg(error ? error.message : "Navigation label saved.");
+    if (!error) refresh();
+  }
   async function toggle(m: Module, field: "club_enabled" | "member_visible") {
     setBusy(true);
     setMsg("");
@@ -138,7 +152,7 @@ export default function OrganizationSettings() {
     return (
       <div className="loading">{msg || "Loading organization settings…"}</div>
     );
-  const theme = organizationTheme(club.primary_color);
+  const theme = organizationTheme(club);
   return (
     <>
       <WorkspaceHeader
@@ -202,6 +216,23 @@ export default function OrganizationSettings() {
               />
             </div>
             <div className="field">
+              <label>Website URL</label>
+              <input
+                type="url"
+                placeholder="https://yourclub.com"
+                value={club.website_url || ""}
+                onChange={(e) => setClub({ ...club, website_url: e.target.value })}
+              />
+            </div>
+            <div className="field">
+              <label>Contact email</label>
+              <input
+                type="email"
+                value={club.contact_email || ""}
+                onChange={(e) => setClub({ ...club, contact_email: e.target.value })}
+              />
+            </div>
+            <div className="field">
               <label>Portal heading</label>
               <input
                 value={club.portal_title || ""}
@@ -221,11 +252,11 @@ export default function OrganizationSettings() {
             </div>
             <div className="colorGrid">
               {([
-                ["primary_color", "Primary color", "#275e72"],
-                ["secondary_color", "Secondary / accent", "#13d9e8"],
-                ["background_color", "Portal background", "#07111f"],
-                ["surface_color", "Panels and cards", "#0d1b2a"],
-                ["text_color", "Text color", "#f4f8ff"],
+                ["primary_color", "Primary / navigation", "#073e2c"],
+                ["secondary_color", "Accent / highlights", "#c9a64b"],
+                ["background_color", "Portal background", "#f4f1e8"],
+                ["surface_color", "Panels and cards", "#fffdf8"],
+                ["text_color", "Main text", "#102c23"],
               ] as const).map(([key, label, fallback]) => (
                 <label className="field" key={key}>
                   <span>{label}</span>
@@ -243,7 +274,7 @@ export default function OrganizationSettings() {
                 </label>
               ))}
             </div>
-            <small>These colors apply throughout the organization portal and its public-facing site.</small>
+            <small>These colors apply throughout this organization’s member portal, staff workspace, and public-facing site. Your organization has its own independent brand settings.</small>
             <div
               style={{
                 padding: 16,
@@ -303,6 +334,17 @@ export default function OrganizationSettings() {
                 <div>
                   <b>{m.module_catalog?.name || m.module_key}</b>
                   <small>{m.module_catalog?.description}</small>
+                  <label className="field" style={{ marginTop: 10, maxWidth: 300 }}>
+                    <span>Navigation label</span>
+                    <input
+                      aria-label={`${m.module_catalog?.name || m.module_key} navigation label`}
+                      value={m.nav_label || ""}
+                      placeholder={m.module_catalog?.name || m.module_key}
+                      maxLength={32}
+                      onChange={(e) => setMods((current) => current.map((item) => item.module_key === m.module_key ? { ...item, nav_label: e.target.value } : item))}
+                      onBlur={() => void saveNavLabel(m)}
+                    />
+                  </label>
                 </div>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <button

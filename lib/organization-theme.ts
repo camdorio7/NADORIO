@@ -14,7 +14,7 @@ const valid = (value: string | null | undefined, fallback: string) =>
 function luminance(hex: string): number {
   return [1, 3, 5]
     .map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
-    .map((v) => (v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)))
+    .map((v) => (v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)) )
     .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
 }
 
@@ -24,29 +24,35 @@ function mix(hex: string, target: number[], amount: number): string {
 }
 
 /**
- * Accepts either the legacy primary-color string or the complete organization
- * branding record. Legacy callers remain compatible while new callers can
- * supply every white-label color independently.
+ * LINDEX-inspired premium club palette. Every value remains tenant-specific;
+ * the defaults are only used for organizations that have not chosen a brand.
+ * A legacy primary-color string remains supported for older callers.
  */
 export function organizationTheme(
   input?: string | OrganizationBrand | null,
 ): Record<string, string> {
   const brand = typeof input === "string" ? { primary_color: input } : input || {};
-  const primary = valid(brand.primary_color, "#275e72");
-  const secondary = valid(brand.secondary_color, mix(primary, [255, 255, 255], 0.25));
-  const background = valid(brand.background_color, "#f5f7fa");
-  const surface = valid(brand.surface_color, "#ffffff");
-  const text = valid(brand.text_color, "#172434");
+  const primary = valid(brand.primary_color, "#073e2c");
+  const secondary = valid(brand.secondary_color, "#c9a64b");
+  const background = valid(brand.background_color, "#f4f1e8");
+  const surface = valid(brand.surface_color, "#fffdf8");
+  const text = valid(brand.text_color, "#102c23");
+  const dark = mix(primary, [0, 0, 0], 0.22);
+  const soft = mix(primary, [255, 255, 255], 0.91);
   return {
     "--club-primary": primary,
+    "--club-primary-dark": dark,
+    "--club-primary-soft": soft,
     "--club-secondary": secondary,
     "--club-accent": secondary,
+    "--club-secondary-soft": mix(secondary, [255, 255, 255], 0.82),
     "--club-bg": background,
     "--club-surface": surface,
     "--club-text": text,
-    "--club-primary-soft": mix(primary, [255, 255, 255], 0.9),
-    "--club-primary-dark": mix(primary, [0, 0, 0], 0.25),
-    "--club-primary-text": mix(primary, [0, 0, 0], 0.6),
+    "--club-muted": mix(text, [255, 255, 255], 0.48),
+    "--club-border": mix(text, [255, 255, 255], 0.88),
     "--club-on-primary": luminance(primary) > 0.179 ? "#000000" : "#ffffff",
+    "--club-primary-text": mix(primary, [0, 0, 0], 0.7),
+    "--club-on-secondary": luminance(secondary) > 0.179 ? "#30250d" : "#ffffff",
   };
 }
